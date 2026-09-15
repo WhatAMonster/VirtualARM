@@ -14,12 +14,53 @@ export class ARMProcessor{
      */
     exec_(ins) {
         this.registers[31]=0n; //This is our XZR its always zero
-        //DECODER
+        //----------------------DECODER--------------------
         //SYNTAX - OPCODE RD(Destination), RN(Operand), RM(Operand) bitwise and to get the real code
         const rd=ins & HARDWARE_MASKS.REG_MASKS //Bits 4-0 Destination
         const rn=(ins>>5) & HARDWARE_MASKS.REG_MASKS // Bits 9-5 Source 1
         //we gonna keep space to adhere to real arm enginnering for operations like lsr, lsl etc without changing the overall map and keeping the run unidirectionals
         const rm=(ins>>16) & HARDWARE_MASKS.REG_MASKS //Bits 20-16 Source 2
         const opc=(ins & HARDWARE_MASKS.OPCODE_MASK) >>> 0; //used >>> 0 to treat output as unsigned 32 bit because its opcode
+        //---------------------EXECUTION--------------------
+        switch(opc){
+            case ARM64_OPCODES.ADD:
+                this.registers[rd]=this.registers[rn]+this.registers[rm];
+                return {signal: 'ok'};
+            case ARM64_OPCODES.SUB:
+                this.registers[rd]=this.registers[rn]-this.registers[rm];
+                return {signal: 'ok'};
+            case ARM64_OPCODES.MOV:
+                this.registers[rd]=this.registers[rn];
+                return {signal: 'ok'};
+            case ARM64_OPCODES.ORR:
+                this.registers[rd]=this.registers[rn] | this.registers[rm];
+                return {signal: 'ok'};
+            case ARM64_OPCODES.AND:
+                this.registers[rd]=this.registers[rn] & this.registers[rm];
+                return {signal: 'ok'};
+            //CMP OPRN, CPSR register 0000 is for rn>rm, 0100 is for rn=rm and 1000 is for rn<rm
+            case ARM64_OPCODES.CMP:
+                const rn_=this.registers[rn];const rm_this.registers[rm];
+                let flags=0;
+                if(rn_===rm_){
+                    flags |= 0x4
+                }else if(rn_<rm_){
+                    flags |= 0x8
+                }
+                this.registers[CPSR]=flags;
+                return {signal: 'ok'};
+            case ARM64_OPCODES.BEQ:
+                //labels work yet to be done
+                //other branching ops to come after this js aint writing now
+                return {signal: 'ok'};
+            case ARM64_OPCODES.LDR:
+                //needs memory work
+                //everything pertaining like ldrb, str, strb, adrp to follow up this
+                return {signal: 'ok'};
+            case ARM64_OPCODES.SVC: //supervi..
+                if(this.registers[rn]===0)://EXIT CODE
+                    return{signal:'HALT',EXIT_CODE:Number(this.registers['x0'])}
+        }
+
     }
 }
