@@ -1,5 +1,5 @@
 //process handler
-import { ARM64_OPCODES, HARDWARE_MASKS } from './opcodes.js';
+import { ARM64_OPCODES, HARDWARE_MASKS } from './arm64.js';
 export class ARMProcessor{
     constructor(){
         this.registers=new BigInt64Array(32);//31 registers and one zero register
@@ -58,8 +58,14 @@ export class ARMProcessor{
                 //everything pertaining like ldrb, str, strb, adrp to follow up this
                 return {signal: 'ok'};
             case ARM64_OPCODES.SVC: //supervi..
-                if(this.registers[rn]===0)://EXIT CODE
+                if(this.registers[rn]===0 && this.registers[x8]===93){//EXIT CODE
                     return{signal:'HALT',EXIT_CODE:Number(this.registers['x0'])}
+                }else if(this.registers[rn]===0 && this.registers[x8]===64){
+                    //print call
+                    return{signal:'PRINT'}
+                }
+            default://handle out of declaration opcodes
+                return{signal:'FUCK_MAN_WE_DONT_HAVE_IT_YET'}
         }
 
     }
