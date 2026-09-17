@@ -3,9 +3,18 @@ import { ARMInterpreter } from './itpr.js';
 //setting up
 const machinecont_ = document.getElementById('machinecont_');
 const ink = machinecont_.getContext('2d');
-
+//sharpner
+const scale = window.devicePixelRatio || 1;
+const viewWidth = 900;
+const viewHeight = 700;
+machinecont_.style.width = viewWidth + "px";
+machinecont_.style.height = viewHeight + "px";
+machinecont_.width = viewWidth * scale;
+machinecont_.height = viewHeight * scale;
+ink.scale(scale, scale);
+//----
 const trw = [];
-const maxtrw = 25;
+const maxtrw = 90;
 let Streamline = "VirtualARM booted...";
 let inputBuffer = "";
 // VROOMIN'
@@ -16,14 +25,16 @@ const interpreter = new ARMInterpreter({
 
 function useink() {
     ink.fillStyle = '#000000';
-    ink.fillRect(0,0,500,500);
+    ink.fillRect(0,0,900,700);
     ink.font = '12px monospace';
     ink.fillStyle = '#00ff00';
-
-    for(let i = 0; i < trw.length; i++){
-        ink.fillText(trw[i], 20, 30 + (i * 15));
+    const maxRows=50;
+    const visiblelines=trw.slice(-maxRows);
+    for(let i = 0; i < visiblelines.length; i++){
+        ink.fillText(visiblelines[i], 20, 10 + (i * 13));
     }
-    ink.fillText("arm64# " + inputBuffer + "_", 20, 480);
+    const inputlineY=10+(visiblelines.length*13)+13;
+    ink.fillText("./~: " + inputBuffer + "_", 20, inputlineY);
 }
 
 function paint(string) {
@@ -37,7 +48,7 @@ function paint(string) {
 
 window.addEventListener('keydown', (x) => {
     if(x.key === 'Enter'){
-        paint("arm64# " + inputBuffer);
+        paint("./~: " + inputBuffer);
         interpreter.Input_(inputBuffer);
         inputBuffer = "";
     } else if(x.key === 'Backspace'){
