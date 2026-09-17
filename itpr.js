@@ -10,7 +10,7 @@ export class ARMInterpreter{
     }
     //recieving input from ui
     Input_(str){
-        const command=str.trim().replace(/\s+/g, '') //clears up both trailing(completely removed) and internal spaces(squished to one)
+        const command=str.trim().replace(/\s+/g, ' ') //clears up both trailing(completely removed) and internal spaces(squished to one)
         //list registers
         if(command.toLowerCase()==="ls reg"){
             let output="---(*) REGISTER---\n"
@@ -34,7 +34,7 @@ export class ARMInterpreter{
             }
         //ADD(type 1) rd, rn, rm
         if(/^add x\d+ x\d+ x\d+$/i.test(command)){
-            const matches=match(/\d+/g);
+            const matches=command.match(/\d+/g);
             let ins=ARM64_OPCODES.ADD;
             ins |= (parseInt(matches[2])<<16); //rm
             ins |= (parseInt(matches[1])<<5);  //rn
@@ -45,7 +45,7 @@ export class ARMInterpreter{
         }
         //SVC #0
         if(/^svc #0$/i.test(command)){
-            const matches=match(/\d+/g);
+            const matches=command.match(/\d+/g);
             let ins=ARM64_OPCODES.SVC;
             ins |= (0<<16); //rm
             ins |= (parseInt(matches[0]<<5)); //rn
@@ -54,6 +54,6 @@ export class ARMInterpreter{
             this.sendToDebug(`SVC Call: retruned ${res.SIGNAL}`)
             return;
         }
-        this.sendToUi(`Unknown Syntax: ${command}`);
+        this.sendToUI(`Unknown Syntax: ${command}`);
         }
     }

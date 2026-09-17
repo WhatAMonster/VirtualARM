@@ -40,7 +40,7 @@ export class ARMProcessor{
                 return {signal: 'ok'};
             //CMP OPRN, CPSR register 0000 is for rn>rm, 0100 is for rn=rm and 1000 is for rn<rm
             case ARM64_OPCODES.CMP:
-                const rn_=this.registers[rn];const rm_this.registers[rm];
+                const rn_=this.registers[rn];const rm_=this.registers[rm];
                 let flags=0;
                 if(rn_===rm_){
                     flags |= 0x4
@@ -58,9 +58,9 @@ export class ARMProcessor{
                 //everything pertaining like ldrb, str, strb, adrp to follow up this
                 return {signal: 'ok'};
             case ARM64_OPCODES.SVC: //supervi..
-                if(this.registers[rn]===0 && this.registers[x8]===93){//EXIT CODE
-                    return{signal:'HALT',EXIT_CODE:Number(this.registers['x0'])}
-                }else if(this.registers[rn]===0 && this.registers[x8]===64){
+                if(this.registers[rn]===0 && this.registers[8]===93n){//EXIT CODE
+                    return{signal:'HALT',EXIT_CODE:Number(this.registers[0])}
+                }else if(this.registers[rn]===0 && this.registers[8]===64n){
                     //print call
                     return{signal:'PRINT'}
                 }
