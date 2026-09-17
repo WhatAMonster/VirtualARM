@@ -157,7 +157,7 @@ export class ARMInterpreter{
             const matches=command.match(/\d+/g);
             let ins=ARM64_OPCODES.SVC;
             ins |= (0<<16); //rm
-            ins |= (parseInt(matches[0]<<5)); //rn
+            ins |= (parseInt(matches[0])<<5); //rn
             ins |= 0; //rd
             const res=this.cpu.exec_(ins);
             this.sendToDebug(`SVC Call: retruned ${res.SIGNAL}`)
