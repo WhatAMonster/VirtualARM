@@ -22,7 +22,11 @@ const interpreter = new ARMInterpreter({
     paintUI: (txt) => { paint(txt); },
                                        writeDebug: (msg) => { paint(`[DEBUG] ${msg}`); }
 });
-
+let showcursor=true;
+setInterval(()=>{
+    showcursor = !showcursor;
+    useink();
+}, 500);
 function useink() {
     ink.fillStyle = '#000000';
     ink.fillRect(0,0,900,700);
@@ -34,7 +38,8 @@ function useink() {
         ink.fillText(visiblelines[i], 20, 10 + (i * 13));
     }
     const inputlineY=10+(visiblelines.length*13)+13;
-    ink.fillText("./~: " + inputBuffer + "_", 20, inputlineY);
+    const cursor=showcursor ? '_' : '';
+    ink.fillText("./~: " + inputBuffer + cursor, 20, inputlineY);
 }
 
 function paint(string) {
