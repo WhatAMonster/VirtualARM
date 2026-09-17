@@ -16,6 +16,7 @@ export class ARMInterpreter{
             let output="---(*) REGISTER---\n"
             for(let i=0;i<32;i++){
                 output+=`X${i}: ${this.cpu.registers[i]} `;
+                output+="\n"
             }
             this.sendToUI(output);
             return;
