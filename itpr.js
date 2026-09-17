@@ -153,14 +153,12 @@ export class ARMInterpreter{
             return;
         }
         //SVC #0
-        if(/^svc #0$/i.test(command)){
+        if(/^svc #\d+$/i.test(command)){
             const matches=command.match(/\d+/g);
             let ins=ARM64_OPCODES.SVC;
-            ins |= (0<<16); //rm
-            ins |= (parseInt(matches[0])<<5); //rn
-            ins |= 0; //rd
+            ins |= (parseInt(matches[0])); //rd
             const res=this.cpu.exec_(ins);
-            this.sendToDebug(`SVC Call: retruned ${res.SIGNAL}`)
+            this.sendToDebug(`SVC Call:${res.signal}`)
             return;
         }
         this.sendToUI(`Unknown Syntax: ${command}`);
