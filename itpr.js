@@ -22,7 +22,7 @@ export class ARMInterpreter{
             return;
         }
         //ASSEMBLER PARSER
-        //MOV X{i}, #\d+
+        //MOV X{i} #\d+
         if(/^mov x\d+ #\d+$/i.test(command)){
             const matches=command.match(/\d+/g);//register value at index 0 and literal value at index 1
             const regIndex=parseInt(matches[0]);//in decimal
@@ -33,6 +33,17 @@ export class ARMInterpreter{
             }else{this.sendToDebug(`Illegal assignment(${immediateValue}) to x${regIndex}.`)}
             return;
             }
+        //MOV X{i} X{j} type2
+        if(/^mov x\d+ x\d+$/i.test(command)){
+            const matches=command.match(/\d+/g);//register vlaues at index 0 and 1
+            const regIndex=parseInt(matches[0]);//in decimal
+            const sourceReg=parseInt(matches[1])//in decimal
+            if(regIndex<31){
+                this.cpu.registers[regIndex]=this.cpu.registers[sourceReg];
+                this.sendToDebug(`Loaded ${this.cpu.registers[sourceReg]} in x${regIndex}.`);
+            }else{this.sendToDebug(`Illegal assignment(${this.cpu.registers[sourceReg]}) to x${regIndex}.`)}
+            return;
+        }
         //ADD(type 1) rd, rn, rm
         if(/^add x\d+ x\d+ x\d+$/i.test(command)){
             const matches=command.match(/\d+/g);
@@ -42,6 +53,103 @@ export class ARMInterpreter{
             ins |= parseInt(matches[0]); //rd
             const res=this.cpu.exec_(ins);
             this.sendToDebug(`Executed with return code: ${res.signal}`);
+            return;
+        }
+        //ADD(type2 with immediate) rd, rn, #immediate
+        if(/^add x\d+ x\d+ #\d+$/i.test(command)){
+            const matches=command.match(/\d+/g);
+            let ins=ARM64_OPCODES.ADD;
+            //register 30 for immediate storing
+            let oldval=this.cpu.registers[30]
+            this.cpu.registers[30]=BigInt(matches[2]);
+            ins |= (30<<16); //rm
+            ins |= (parseInt(matches[1])<<5);  //rn
+            ins |= parseInt(matches[0]); //rd
+            const res=this.cpu.exec_(ins);
+            this.sendToDebug(`Executed with return code: ${res.signal}`);
+            //load back
+            this.cpu.registers[30]=oldval
+            return;
+        }
+        //SUB(type 1) rd, rn, rm
+        if(/^sub x\d+ x\d+ x\d+$/i.test(command)){
+            const matches=command.match(/\d+/g);
+            let ins=ARM64_OPCODES.SUB;
+            ins |= (parseInt(matches[2])<<16); //rm
+            ins |= (parseInt(matches[1])<<5);  //rn
+            ins |= parseInt(matches[0]); //rd
+            const res=this.cpu.exec_(ins);
+            this.sendToDebug(`Executed with return code: ${res.signal}`);
+            return;
+        }
+        //SUB(type2 with immediate) rd, rn, #immediate
+        if(/^sub x\d+ x\d+ #\d+$/i.test(command)){
+            const matches=command.match(/\d+/g);
+            let ins=ARM64_OPCODES.SUB;
+            //register 30 for immediate storing
+            let oldval=this.cpu.registers[30]
+            this.cpu.registers[30]=BigInt(matches[2]);
+            ins |= (30<<16); //rm
+            ins |= (parseInt(matches[1])<<5);  //rn
+            ins |= parseInt(matches[0]); //rd
+            const res=this.cpu.exec_(ins);
+            this.sendToDebug(`Executed with return code: ${res.signal}`);
+            //load back
+            this.cpu.registers[30]=oldval
+            return;
+        }
+        //MUL(type 1) rd, rn, rm
+        if(/^mul x\d+ x\d+ x\d+$/i.test(command)){
+            const matches=command.match(/\d+/g);
+            let ins=ARM64_OPCODES.MUL;
+            ins |= (parseInt(matches[2])<<16); //rm
+            ins |= (parseInt(matches[1])<<5);  //rn
+            ins |= parseInt(matches[0]); //rd
+            const res=this.cpu.exec_(ins);
+            this.sendToDebug(`Executed with return code: ${res.signal}`);
+            return;
+        }
+        //MUL(type2 with immediate) rd, rn, #immediate
+        if(/^mul x\d+ x\d+ #\d+$/i.test(command)){
+            const matches=command.match(/\d+/g);
+            let ins=ARM64_OPCODES.MUL;
+            //register 30 for immediate storing
+            let oldval=this.cpu.registers[30]
+            this.cpu.registers[30]=BigInt(matches[2]);
+            ins |= (30<<16); //rm
+            ins |= (parseInt(matches[1])<<5);  //rn
+            ins |= parseInt(matches[0]); //rd
+            const res=this.cpu.exec_(ins);
+            this.sendToDebug(`Executed with return code: ${res.signal}`);
+            //load back
+            this.cpu.registers[30]=oldval
+            return;
+        }
+        //SDIV(type 1) rd, rn, rm
+        if(/^sdiv x\d+ x\d+ x\d+$/i.test(command)){
+            const matches=command.match(/\d+/g);
+            let ins=ARM64_OPCODES.SDIV;
+            ins |= (parseInt(matches[2])<<16); //rm
+            ins |= (parseInt(matches[1])<<5);  //rn
+            ins |= parseInt(matches[0]); //rd
+            const res=this.cpu.exec_(ins);
+            this.sendToDebug(`Executed with return code: ${res.signal}`);
+            return;
+        }
+        //SDIV(type2 with immediate) rd, rn, #immediate
+        if(/^sdiv x\d+ x\d+ #\d+$/i.test(command)){
+            const matches=command.match(/\d+/g);
+            let ins=ARM64_OPCODES.SDIV;
+            //register 30 for immediate storing
+            let oldval=this.cpu.registers[30]
+            this.cpu.registers[30]=BigInt(matches[2]);
+            ins |= (30<<16); //rm
+            ins |= (parseInt(matches[1])<<5);  //rn
+            ins |= parseInt(matches[0]); //rd
+            const res=this.cpu.exec_(ins);
+            this.sendToDebug(`Executed with return code: ${res.signal}`);
+            //load back
+            this.cpu.registers[30]=oldval
             return;
         }
         //SVC #0

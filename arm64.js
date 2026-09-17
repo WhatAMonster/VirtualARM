@@ -1,18 +1,4 @@
 // ARM64 OPCDES
-/*
- * NAME CODE
- * MOV  0001
- * SVC  0011
- * ADD  0010
- * SUB  0110
- * CMP  0100
- * ORR  0101
- * AND  0111
- * LDR  0110
- * STR  0000
- * LDRB 1000
- * STRB 1001
- */
 export const ARM64_OPCODES = {
     MOV:  0x01000000,
     ADD:  0x02000000,
@@ -21,7 +7,9 @@ export const ARM64_OPCODES = {
     CMP:  0x04000000,
     ORR:  0x05000000,
     AND:  0x07000000,
-    LDR:  0x08000000
+    LDR:  0x08000000,
+    MUL:  0x09000000,
+    SDIV:  0x0A000000
 };
 
 export const HARDWARE_MASKS = {

@@ -57,6 +57,12 @@ export class ARMProcessor{
                 //needs memory work
                 //everything pertaining like ldrb, str, strb, adrp to follow up this
                 return {signal: 'ok'};
+            case ARM64_OPCODES.MUL:
+                this.registers[rd]=this.registers[rn]*this.registers[rm];
+                return {signal: 'ok'};
+            case ARM64_OPCODES.SDIV:
+                this.registers[rd]=this.registers[rn]/this.registers[rm];
+                return {signal: 'ok'};
             case ARM64_OPCODES.SVC: //supervi..
                 if(this.registers[rn]===0 && this.registers[8]===93n){//EXIT CODE
                     return{signal:'HALT',EXIT_CODE:Number(this.registers[0])}
