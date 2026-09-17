@@ -9,11 +9,27 @@
         body { background-color: #1e1e1e; margin: 0; padding: 20px; display: flex; justify-content: center; }
         #machinecont_ { width: 900px; height: 500px; border: 2px solid #333; border-radius: 6px; overflow: hidden; }
         canvas {
-    image-rendering: crisp-edges;
-}
+    image-rendering: crisp-edges;}
+        .cont {
+        padding:2px;
+        border:1px solid green;
+        display: flex;
+        flex-direction: column;
+        background-color:#000;
+        }
+        .header{
+        padding:2px;
+        display:flex;
+        flex-direction: row;
+        color: lightblue;
+        background-color:#000;
+        font-family: monospace;
+        font-size: 12px;
+        }
     </style>
     </head>
 <body>
-    <canvas id="machinecont_"></canvas>
+    <div id="container" class="cont"><div class="header"><span>VirtualARM v1.0.0 (pre-alpha) &nbsp; [CONSOLE]</span><span style="min-width:62%;"></span><span style="font-size:20px;color:green;user-select:none;cursor:pointer;font-family:monospace;">o</span></div>
+    <canvas id="machinecont_"></canvas></div>
 </body>
 </html>
