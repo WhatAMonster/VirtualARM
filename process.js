@@ -61,8 +61,13 @@ export class ARMProcessor{
                 this.registers[rd]=this.registers[rn]*this.registers[rm];
                 return {signal: 'ok'};
             case ARM64_OPCODES.SDIV:
-                this.registers[rd]=this.registers[rn]/this.registers[rm];
-                return {signal: 'ok'};
+                if(this.registers[rm]>0){
+                    this.registers[rd]=this.registers[rn]/this.registers[rm];
+                    return {signal: 'ok'};
+                }
+                    else{
+                        return {signal: 'ERROR_DIVISION_BY_ZERO'}
+                    }
             case ARM64_OPCODES.SVC: //supervi..
                 if(this.registers[rd]===BigInt(0) && this.registers[8]===BigInt(93)){//EXIT CODE
                     return{signal:'HALT',EXIT_CODE:Number(this.registers[0])}

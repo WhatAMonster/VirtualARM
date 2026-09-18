@@ -152,6 +152,60 @@ export class ARMInterpreter{
             this.cpu.registers[30]=oldval
             return;
         }
+        //ORR(type 1) rd, rn, rm
+        if(/^orr x\d+ x\d+ x\d+$/i.test(command)){
+            const matches=command.match(/\d+/g);
+            let ins=ARM64_OPCODES.ORR;
+            ins |= (parseInt(matches[2])<<16); //rm
+            ins |= (parseInt(matches[1])<<5);  //rn
+            ins |= parseInt(matches[0]); //rd
+            const res=this.cpu.exec_(ins);
+            this.sendToDebug(`Executed with return code: ${res.signal}`);
+            return;
+        }
+        //ORR(type2 with immediate) rd, rn, #immediate
+        if(/^orr x\d+ x\d+ #\d+$/i.test(command)){
+            const matches=command.match(/\d+/g);
+            let ins=ARM64_OPCODES.ORR;
+            //register 30 for immediate storing
+            let oldval=this.cpu.registers[30]
+            this.cpu.registers[30]=BigInt(matches[2]);
+            ins |= (30<<16); //rm
+            ins |= (parseInt(matches[1])<<5);  //rn
+            ins |= parseInt(matches[0]); //rd
+            const res=this.cpu.exec_(ins);
+            this.sendToDebug(`Executed with return code: ${res.signal}`);
+            //load back
+            this.cpu.registers[30]=oldval
+            return;
+        }
+        //AND(type 1) rd, rn, rm
+        if(/^and x\d+ x\d+ x\d+$/i.test(command)){
+            const matches=command.match(/\d+/g);
+            let ins=ARM64_OPCODES.AND;
+            ins |= (parseInt(matches[2])<<16); //rm
+            ins |= (parseInt(matches[1])<<5);  //rn
+            ins |= parseInt(matches[0]); //rd
+            const res=this.cpu.exec_(ins);
+            this.sendToDebug(`Executed with return code: ${res.signal}`);
+            return;
+        }
+        //AND(type2 with immediate) rd, rn, #immediate
+        if(/^and x\d+ x\d+ #\d+$/i.test(command)){
+            const matches=command.match(/\d+/g);
+            let ins=ARM64_OPCODES.AND;
+            //register 30 for immediate storing
+            let oldval=this.cpu.registers[30]
+            this.cpu.registers[30]=BigInt(matches[2]);
+            ins |= (30<<16); //rm
+            ins |= (parseInt(matches[1])<<5);  //rn
+            ins |= parseInt(matches[0]); //rd
+            const res=this.cpu.exec_(ins);
+            this.sendToDebug(`Executed with return code: ${res.signal}`);
+            //load back
+            this.cpu.registers[30]=oldval
+            return;
+        }
         //SVC #0
         if(/^svc #\d+$/i.test(command)){
             const matches=command.match(/\d+/g);
