@@ -4,6 +4,7 @@ export class ARMProcessor{
     constructor(){
         this.registers=new BigInt64Array(32);//31 registers and one zero register
         this.PC=0n;//Program Counter to track address
+        this.flags={n:0,z:0,c:0,v:0}; //CPSR Flags
     }
     /*
      *Executing a single 32-bit ARM Instruction
@@ -47,7 +48,7 @@ export class ARMProcessor{
                 }else if(rn_<rm_){
                     flags |= 0x8
                 }
-                this.registers[CPSR]=flags;
+                this.registers[BigInt(-1)]=flags;
                 return {signal: 'ok'};
             case ARM64_OPCODES.BEQ:
                 //labels work yet to be done
