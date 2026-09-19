@@ -34,11 +34,11 @@ export class memo{
      111-Read Byte
 
      */
-    readWord(addr){this.view.getUint32(addr, true);}// true stands for little endianess --> first byte(left most) is least significant
+    readWord(addr){return this.view.getUint32(addr, true);}// true stands for little endianess --> first byte(left most) is least significant
     writeWord(addr, val){this.view.setUint32(addr, val, true);}
-    readHWord(addr){this.view.getUint16(addr, true);}
-    writeHWord(addr){this.view.setUint16(addr, val, true);}
-    readByte(addr){this.view.getUint8(addr, true);}
-    writeByte(addr){this.view.setUint8(addr, value, true);}
+    readHWord(addr){return this.view.getUint16(addr, true);}
+    writeHWord(addr, val){this.view.setUint16(addr, val, true);}
+    readByte(addr){return this.view.getUint8(addr, true);}
+    writeByte(addr, val){this.view.setUint8(addr, value, true);}
 }
 

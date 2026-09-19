@@ -1,9 +1,11 @@
 //process handler
-import { ARM64_OPCODES, HARDWARE_MASKS } from './arm64.js';
+import { ARM64_OPCODES, HARDWARE_MASKS, memo } from './arm64.js';
+
 export class ARMProcessor{
     constructor(){
         this.registers=new BigInt64Array(32);//31 registers and one zero register
         this.PC=0n;//Program Counter to track address
+        this.mem=new memo();
     }
     /*
      *Executing a single 32-bit ARM Instruction
@@ -54,8 +56,8 @@ export class ARMProcessor{
                 //other branching ops to come after this js aint writing now
                 return {signal: 'ok'};
             case ARM64_OPCODES.LDR:
-                //needs memory work
-                //everything pertaining like ldrb, str, strb, adrp to follow up this
+                const addr=Number(this.registers[rn]);
+                this.registers[rd]=BigInt(mem.readWord(addr));
                 return {signal: 'ok'};
             case ARM64_OPCODES.MUL:
                 this.registers[rd]=this.registers[rn]*this.registers[rm];
