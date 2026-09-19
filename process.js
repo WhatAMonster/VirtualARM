@@ -4,7 +4,6 @@ export class ARMProcessor{
     constructor(){
         this.registers=new BigInt64Array(32);//31 registers and one zero register
         this.PC=0n;//Program Counter to track address
-
     }
     /*
      *Executing a single 32-bit ARM Instruction
@@ -18,7 +17,7 @@ export class ARMProcessor{
         //----------------------DECODER--------------------
         //SYNTAX - OPCODE RD(Destination), RN(Operand), RM(Operand) bitwise and to get the real code
         const rd=ins & HARDWARE_MASKS.REG_MASKS //Bits 4-0 Destination
-        const rn=(ins>>5) & HARDWARE_MASKS.REG_MASKS // Bits 9-5 Source
+        const rn=(ins>>5) & HARDWARE_MASKS.REG_MASKS // Bits 9-5 Source 1
         //we gonna keep space to adhere to real arm enginnering for operations like lsr, lsl etc without changing the overall map and keeping the run unidirectionals
         const rm=(ins>>16) & HARDWARE_MASKS.REG_MASKS //Bits 20-16 Source 2
         const opc=(ins & HARDWARE_MASKS.OPCODE_MASK) >>> 0; //used >>> 0 to treat output as unsigned 32 bit because its opcode
@@ -48,7 +47,7 @@ export class ARMProcessor{
                 }else if(rn_<rm_){
                     flags |= 0x8
                 }
-                this.registers[BigInt(-1)]=flags;
+                this.registers[CPSR]=flags;
                 return {signal: 'ok'};
             case ARM64_OPCODES.BEQ:
                 //labels work yet to be done
@@ -70,9 +69,9 @@ export class ARMProcessor{
                         return {signal: 'ERROR_DIVISION_BY_ZERO'}
                     }
             case ARM64_OPCODES.SVC: //supervi..
-                if(this.registers[rd]===BigInt(0) && this.registers[8]===BigInt(93)){//EXIT CODE
+                if((this.registers[rd] + this.registers[8])===BigInt(93)){//EXIT CODE
                     return{signal:'HALT',EXIT_CODE:Number(this.registers[0])}
-                }else if(this.registers[rd]===BigInt(0) && this.registers[8]===BigInt(64)){
+                }else if((this.registers[rd] + this.registers[8])===BigInt(64)){
                     //print call
                     return{signal:'PRINT'}
                 }else{return {signal:`UNKNOWN_SVC_CALL: x8(${this.registers[8]}) IMM_:${this.registers[rd]}`}}

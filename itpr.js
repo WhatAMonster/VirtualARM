@@ -52,6 +52,7 @@ export class ARMInterpreter{
             ins |= (parseInt(matches[1])<<5);  //rn
             ins |= parseInt(matches[0]); //rd
             const res=this.cpu.exec_(ins);
+            this.cpu.registers[31]=BigInt(0);
             this.sendToDebug(`Executed with return code: ${res.signal}`);
             return;
         }
@@ -66,6 +67,7 @@ export class ARMInterpreter{
             ins |= (parseInt(matches[1])<<5);  //rn
             ins |= parseInt(matches[0]); //rd
             const res=this.cpu.exec_(ins);
+            this.cpu.registers[31]=BigInt(0);
             this.sendToDebug(`Executed with return code: ${res.signal}`);
             //load back
             this.cpu.registers[30]=oldval
@@ -79,6 +81,7 @@ export class ARMInterpreter{
             ins |= (parseInt(matches[1])<<5);  //rn
             ins |= parseInt(matches[0]); //rd
             const res=this.cpu.exec_(ins);
+            this.cpu.registers[31]=BigInt(0);
             this.sendToDebug(`Executed with return code: ${res.signal}`);
             return;
         }
@@ -93,6 +96,7 @@ export class ARMInterpreter{
             ins |= (parseInt(matches[1])<<5);  //rn
             ins |= parseInt(matches[0]); //rd
             const res=this.cpu.exec_(ins);
+            this.cpu.registers[31]=BigInt(0);
             this.sendToDebug(`Executed with return code: ${res.signal}`);
             //load back
             this.cpu.registers[30]=oldval
@@ -106,6 +110,7 @@ export class ARMInterpreter{
             ins |= (parseInt(matches[1])<<5);  //rn
             ins |= parseInt(matches[0]); //rd
             const res=this.cpu.exec_(ins);
+            this.registers[31]=BigInt(0);
             this.sendToDebug(`Executed with return code: ${res.signal}`);
             return;
         }
@@ -120,6 +125,7 @@ export class ARMInterpreter{
             ins |= (parseInt(matches[1])<<5);  //rn
             ins |= parseInt(matches[0]); //rd
             const res=this.cpu.exec_(ins);
+            this.cpu.registers[31]=BigInt(0);
             this.sendToDebug(`Executed with return code: ${res.signal}`);
             //load back
             this.cpu.registers[30]=oldval
@@ -133,6 +139,7 @@ export class ARMInterpreter{
             ins |= (parseInt(matches[1])<<5);  //rn
             ins |= parseInt(matches[0]); //rd
             const res=this.cpu.exec_(ins);
+            this.cpu.registers[31]=BigInt(0);
             this.sendToDebug(`Executed with return code: ${res.signal}`);
             return;
         }
@@ -147,6 +154,7 @@ export class ARMInterpreter{
             ins |= (parseInt(matches[1])<<5);  //rn
             ins |= parseInt(matches[0]); //rd
             const res=this.cpu.exec_(ins);
+            this.cpu.registers[31]=BigInt(0);
             this.sendToDebug(`Executed with return code: ${res.signal}`);
             //load back
             this.cpu.registers[30]=oldval
@@ -160,6 +168,7 @@ export class ARMInterpreter{
             ins |= (parseInt(matches[1])<<5);  //rn
             ins |= parseInt(matches[0]); //rd
             const res=this.cpu.exec_(ins);
+            this.cpu.registers[31]=BigInt(0);
             this.sendToDebug(`Executed with return code: ${res.signal}`);
             return;
         }
@@ -174,6 +183,7 @@ export class ARMInterpreter{
             ins |= (parseInt(matches[1])<<5);  //rn
             ins |= parseInt(matches[0]); //rd
             const res=this.cpu.exec_(ins);
+            this.cpu.registers[31]=BigInt(0);
             this.sendToDebug(`Executed with return code: ${res.signal}`);
             //load back
             this.cpu.registers[30]=oldval
@@ -187,6 +197,7 @@ export class ARMInterpreter{
             ins |= (parseInt(matches[1])<<5);  //rn
             ins |= parseInt(matches[0]); //rd
             const res=this.cpu.exec_(ins);
+            this.cpu.registers[31]=BigInt(0);
             this.sendToDebug(`Executed with return code: ${res.signal}`);
             return;
         }
@@ -201,29 +212,21 @@ export class ARMInterpreter{
             ins |= (parseInt(matches[1])<<5);  //rn
             ins |= parseInt(matches[0]); //rd
             const res=this.cpu.exec_(ins);
+            this.cpu.registers[31]=BigInt(0);
             this.sendToDebug(`Executed with return code: ${res.signal}`);
             //load back
             this.cpu.registers[30]=oldval
-            return;
-        }
-        //CMP(type 1) rd, rn, rm
-        if(/^cmp x\d+ x\d+$/i.test(command)){
-            const matches=command.match(/\d+/g);
-            // register CPSR :- indexed at -1 to keep flags (not a 1:1 representation of irl stuff)
-            let ins=ARM64_OPCODES.CMP;
-            ins |= (parseInt(matches[1])<<16); //rm
-            ins |= (parseInt(matches[0])<<5);  //rn
-            ins |= -1; //rd
-            const res=this.cpu.exec_(ins);
-            this.sendToDebug(`Executed with return code: ${res.signal}`);
             return;
         }
         //SVC #0
         if(/^svc #\d+$/i.test(command)){
             const matches=command.match(/\d+/g);
             let ins=ARM64_OPCODES.SVC;
+            ins |= (0<<16);
+            ins |= (0<<5);
             ins |= (parseInt(matches[0])); //rd
             const res=this.cpu.exec_(ins);
+            this.cpu.registers[31]=BigInt(0);
             this.sendToDebug(`SVC Call:${res.signal}`)
             return;
         }
