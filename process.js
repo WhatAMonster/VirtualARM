@@ -61,7 +61,7 @@ export class ARMProcessor{
                 return {signal: 'ok'};
             case ARM64_OPCODES.LDR:
                 const addr=Number(this.registers[rn]);
-                this.registers[rd]=BigInt(mem.readWord(addr));
+                this.registers[rd]=BigInt(this.mem.readWord(addr));
                 return {signal: 'ok'};
             case ARM64_OPCODES.MUL:
                 this.registers[rd]=this.registers[rn]*this.registers[rm];
