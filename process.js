@@ -6,6 +6,7 @@ export class ARMProcessor{
         this.registers=new BigInt64Array(32);//31 registers and one zero register
         this.PC=0n;//Program Counter to track address
         this.mem=new memo();
+        this.CPSR=0;//Z:-0x1 = 0001, N:- 0x2 = 0010, C:- 0x4 = 0100, V:- 0x8 = 1000
     }
     /*
      *Executing a single 32-bit ARM Instruction
@@ -44,12 +45,15 @@ export class ARMProcessor{
             case ARM64_OPCODES.CMP:
                 const rn_=this.registers[rn];const rm_=this.registers[rm];
                 let flags=0;
-                if(rn_===rm_){
-                    flags |= 0x4
-                }else if(rn_<rm_){
-                    flags |= 0x8
-                }
-                this.registers[CPSR]=flags;
+                const r=rn_-rm_;
+                if(r===0n){flags |= 0x1;}//Z
+                if(r<0n){flags |= 0x2;}//N
+                if(rn_>=rm_){flags |= 0x4;}//C
+                let vf=0;
+                if(rn_>=0n && rm_<0n &&  r<0n){vf=1}//PosMinusNeg -> positive overwrapped to sm negative no.
+                if(rn_<0n && rm_>=0n && r>=0n){vf=1}//NegMinusPos -> negative overwrapped to sm positive no. or zero
+                if(vf===1){flags |= 0x8}//V
+                this.CPSR=flags;
                 return {signal: 'ok'};
             case ARM64_OPCODES.BEQ:
                 //labels work yet to be done
