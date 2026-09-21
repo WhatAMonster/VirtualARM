@@ -212,7 +212,7 @@ export class ARMInterpreter{
             const matches=command.match(/\d+/g);
             let ins=ARM64_OPCODES.LDR;
             ins |= (parseInt(matches[1])<<5);  //register(rn) carrying Address
-            ins |= parseInt(matches[0]); //rd Place to take in the val
+            ins |= parseInt(matches[0]);//rd Place to take in the val
             const res=this.cpu.exec_(ins);
             this.sendToDebug(`Executed with return code: ${res.signal}`);
             return;
@@ -221,6 +221,46 @@ export class ARMInterpreter{
         if(/^str x\d+ \[x\d+\]$/i.test(command)){
             const matches=command.match(/\d+/g);
             let ins=ARM64_OPCODES.STR;
+            ins |= (parseInt(matches[1])<<5);  //register(rn) carrying Address
+            ins |= parseInt(matches[0]); //rd Place to save
+            const res=this.cpu.exec_(ins);
+            this.sendToDebug(`Executed with return code: ${res.signal}`);
+            return;
+        }
+        //LDRH(type 1) rd, [addr]
+        if(/^ldrh x\d+ \[x\d+\]$/i.test(command)){
+            const matches=command.match(/\d+/g);
+            let ins=ARM64_OPCODES.LDRH;
+            ins |= (parseInt(matches[1])<<5);  //register(rn) carrying Address
+            ins |= parseInt(matches[0]); //rd Place to take in the val
+            const res=this.cpu.exec_(ins);
+            this.sendToDebug(`Executed with return code: ${res.signal}`);
+            return;
+        }
+        //LDRB(type 1) rd, [addr]
+        if(/^ldr x\d+ \[x\d+\]$/i.test(command)){
+            const matches=command.match(/\d+/g);
+            let ins=ARM64_OPCODES.LDRB;
+            ins |= (parseInt(matches[1])<<5);  //register(rn) carrying Address
+            ins |= parseInt(matches[0]);//rd Place to take in the val
+            const res=this.cpu.exec_(ins);
+            this.sendToDebug(`Executed with return code: ${res.signal}`);
+            return;
+        }
+        //STRH(type 1) rd, [addr]
+        if(/^str x\d+ \[x\d+\]$/i.test(command)){
+            const matches=command.match(/\d+/g);
+            let ins=ARM64_OPCODES.STRH;
+            ins |= (parseInt(matches[1])<<5);  //register(rn) carrying Address
+            ins |= parseInt(matches[0]); //rd Place to save
+            const res=this.cpu.exec_(ins);
+            this.sendToDebug(`Executed with return code: ${res.signal}`);
+            return;
+        }
+        //STRB(type 1) rd, [addr]
+        if(/^str x\d+ \[x\d+\]$/i.test(command)){
+            const matches=command.match(/\d+/g);
+            let ins=ARM64_OPCODES.STRB;
             ins |= (parseInt(matches[1])<<5);  //register(rn) carrying Address
             ins |= parseInt(matches[0]); //rd Place to save
             const res=this.cpu.exec_(ins);

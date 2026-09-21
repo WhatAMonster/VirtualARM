@@ -64,9 +64,25 @@ export class ARMProcessor{
                 addr=Number(this.registers[rn]);
                 this.registers[rd]=BigInt(this.mem.readWord(addr));
                 return {signal: 'ok'};
+            case ARM64_OPCODES.LDRH:
+                addr=Number(this.registers[rn]);
+                this.registers[rd]=BigInt(this.mem.readHWord(addr));
+                return {signal: 'ok'};
+            case ARM64_OPCODES.LDRB:
+                addr=Number(this.registers[rn]);
+                this.registers[rd]=BigInt(this.mem.readByte(addr));
+                return {signal: 'ok'};
             case ARM64_OPCODES.STR:
                 addr=Number(this.registers[rn]);
                 this.mem.writeWord(addr, Number(this.registers[rd]));
+                return {signal: 'ok'};
+            case ARM64_OPCODES.STRH:
+                addr=Number(this.registers[rn]);
+                this.mem.writeHWord(addr, Number(this.registers[rd]));
+                return {signal: 'ok'};
+            case ARM64_OPCODES.STRB:
+                addr=Number(this.registers[rn]);
+                this.mem.writeByte(addr, Number(this.registers[rd]));
                 return {signal: 'ok'};
             case ARM64_OPCODES.MUL:
                 this.registers[rd]=this.registers[rn]*this.registers[rm];
