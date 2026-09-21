@@ -14,7 +14,8 @@ export const ARM64_OPCODES = {
     LDRH:0xC0000000,
     STRH:0xD0000000,
     LDRB:0xE0000000,
-    STRB:0xF0000000
+    STRB:0xF0000000,
+    UDIV:0x1F000000
 };
 
 export const HARDWARE_MASKS = {
