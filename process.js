@@ -16,6 +16,7 @@ export class ARMProcessor{
      * Bits: 31 ----------------- 21 20 ------- 19 18 ---- 14 13 ------------ 10 9 ----- 5 4 ------ 0
      */
     exec_(ins) {
+        let addr=0;
         this.registers[31]=0n; //This is our XZR its always zero
         //----------------------DECODER--------------------
         //SYNTAX - OPCODE RD(Destination), RN(Operand), RM(Operand) bitwise and to get the real code
@@ -60,8 +61,12 @@ export class ARMProcessor{
                 //other branching ops to come after this js aint writing now
                 return {signal: 'ok'};
             case ARM64_OPCODES.LDR:
-                const addr=Number(this.registers[rn]);
+                addr=Number(this.registers[rn]);
                 this.registers[rd]=BigInt(this.mem.readWord(addr));
+                return {signal: 'ok'};
+            case ARM64_OPCODES.STR:
+                addr=Number(this.registers[rn]);
+                this.mem.writeWord(addr, Number(this.registers[rd]));
                 return {signal: 'ok'};
             case ARM64_OPCODES.MUL:
                 this.registers[rd]=this.registers[rn]*this.registers[rm];

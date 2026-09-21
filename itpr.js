@@ -212,7 +212,17 @@ export class ARMInterpreter{
             const matches=command.match(/\d+/g);
             let ins=ARM64_OPCODES.LDR;
             ins |= (parseInt(matches[1])<<5);  //register(rn) carrying Address
-            ins |= parseInt(matches[0]); //rd
+            ins |= parseInt(matches[0]); //rd Place to take in the val
+            const res=this.cpu.exec_(ins);
+            this.sendToDebug(`Executed with return code: ${res.signal}`);
+            return;
+        }
+        //STR(type 1) rd, [addr]
+        if(/^str x\d+ \[x\d+\]$/i.test(command)){
+            const matches=command.match(/\d+/g);
+            let ins=ARM64_OPCODES.STR;
+            ins |= (parseInt(matches[1])<<5);  //register(rn) carrying Address
+            ins |= parseInt(matches[0]); //rd Place to save
             const res=this.cpu.exec_(ins);
             this.sendToDebug(`Executed with return code: ${res.signal}`);
             return;
