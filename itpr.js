@@ -238,7 +238,7 @@ export class ARMInterpreter{
             return;
         }
         //LDRB(type 1) rd, [addr]
-        if(/^ldr x\d+ \[x\d+\]$/i.test(command)){
+        if(/^ldrb x\d+ \[x\d+\]$/i.test(command)){
             const matches=command.match(/\d+/g);
             let ins=ARM64_OPCODES.LDRB;
             ins |= (parseInt(matches[1])<<5);  //register(rn) carrying Address
@@ -248,7 +248,7 @@ export class ARMInterpreter{
             return;
         }
         //STRH(type 1) rd, [addr]
-        if(/^str x\d+ \[x\d+\]$/i.test(command)){
+        if(/^strh x\d+ \[x\d+\]$/i.test(command)){
             const matches=command.match(/\d+/g);
             let ins=ARM64_OPCODES.STRH;
             ins |= (parseInt(matches[1])<<5);  //register(rn) carrying Address
@@ -258,7 +258,7 @@ export class ARMInterpreter{
             return;
         }
         //STRB(type 1) rd, [addr]
-        if(/^str x\d+ \[x\d+\]$/i.test(command)){
+        if(/^strb x\d+ \[x\d+\]$/i.test(command)){
             const matches=command.match(/\d+/g);
             let ins=ARM64_OPCODES.STRB;
             ins |= (parseInt(matches[1])<<5);  //register(rn) carrying Address
