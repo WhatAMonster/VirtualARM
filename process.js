@@ -101,7 +101,7 @@ export class ARMProcessor{
                 }else if(rd===0 && this.registers[8]===BigInt(64)){
                     //print call
                     return{signal:'PRINT'}
-                }else{return {signal:`UNKNOWN_SVC_CALL: x8(${this.registers[8]}) IMM_:${this.registers[rd]}`}}
+                }else{return {signal:`UNKNOWN_SVC_CALL: x8(${this.registers[8]}) IMM_:${rd}`}}
             default://handle out of declaration opcodes
                 return{signal:'FUCK_MAN_WE_DONT_HAVE_IT_YET'}
         }

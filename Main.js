@@ -62,4 +62,4 @@ window.addEventListener('keydown', (x) => {
     }
     useink();
 });
-paint("VirtualARM booted. \n+---------------------------------+\n|                                 |\n      Welcome To VirtualARM      \n      Available Commands:-      \n1. ls reg - lists all registers\n2. mov \n|                                 |\n+---------------------------------+");
+paint("VirtualARM booted. \n+------+-----------------------------+\n|                                    |\n|        Welcome To VirtualARM       |\n| ********************************** |\n| CHANGE LOG:-                       |\n| 1.Fixed SVC Support                |\n| 2.Fixed LDRB/STRB Instruction s-   |\n|  -upport globally                  |\n|                                    |\n+------------------------------------+");
