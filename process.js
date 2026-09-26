@@ -96,15 +96,14 @@ export class ARMProcessor{
                         return {signal: 'ERROR_DIVISION_BY_ZERO'}
                     }
             case ARM64_OPCODES.SVC: //supervi..
-                if((this.registers[rd] + this.registers[8])===BigInt(93)){//EXIT CODE
+                if(rd===0 && this.registers[8]===BigInt(93)){//EXIT CODE
                     return{signal:'HALT',EXIT_CODE:Number(this.registers[0])}
-                }else if((this.registers[rd] + this.registers[8])===BigInt(64)){
+                }else if(rd===0 && this.registers[8]===BigInt(64)){
                     //print call
                     return{signal:'PRINT'}
                 }else{return {signal:`UNKNOWN_SVC_CALL: x8(${this.registers[8]}) IMM_:${this.registers[rd]}`}}
             default://handle out of declaration opcodes
                 return{signal:'FUCK_MAN_WE_DONT_HAVE_IT_YET'}
         }
-
     }
 }

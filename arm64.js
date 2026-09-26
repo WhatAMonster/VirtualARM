@@ -45,6 +45,6 @@ export class memo{
     readHWord(addr){return this.view.getUint16(addr, true);}
     writeHWord(addr, val){this.view.setUint16(addr, val, true);}
     readByte(addr){return this.view.getUint8(addr, true);}
-    writeByte(addr, val){this.view.setUint8(addr, value, true);}
+    writeByte(addr, val){this.view.setUint8(addr, val, true);}
 }
 

@@ -11,11 +11,10 @@ machinecont_.style.width = viewWidth + "px";
 machinecont_.style.height = viewHeight + "px";
 machinecont_.width = viewWidth * scale;
 machinecont_.height = viewHeight * scale;
-ink.scale(scale, scale);
+ink.scale(scale, scale); //scaling everything in the canva to match our window size cum devicePixelRatio
 //----
 const trw = [];
 const maxtrw = 90;
-let Streamline = "VirtualARM booted...";
 let inputBuffer = "";
 // VROOMIN'
 const interpreter = new ARMInterpreter({
@@ -63,5 +62,4 @@ window.addEventListener('keydown', (x) => {
     }
     useink();
 });
-
-paint("VirtualARM booted.");
+paint("VirtualARM booted. \n+---------------------------------+\n|                                 |\n      Welcome To VirtualARM      \n      Available Commands:-      \n1. ls reg - lists all registers\n2. mov \n|                                 |\n+---------------------------------+");
